@@ -26,14 +26,14 @@
       name = "";
       text = /*nimscript*/ ''
 import std/os
-let nimbleDir = getHomeDir() & "/.nimble/bin"
-let zigcc = nimbleDir & "/zigcc"
+let nimbleDir = getHomeDir() & ".nimble/bin/"
+let zigcc = nimbleDir & "zigcc"
 
 switch("path", nimbleDir)
 switch("define", "release")
 switch("cc", "clang")
-switch("clang.exe", "zigcc")
-switch("clang.linkerexe", "zigcc")
+switch("clang.exe", zigcc)
+switch("clang.linkerexe", zigcc)
       '';
     };
 
