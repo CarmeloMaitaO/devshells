@@ -1,5 +1,5 @@
 {
-  description = "Nim development environment with a Nimble config";
+  description = "Nim development environment with a Nimscript config and Zigcc";
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org/"
@@ -25,25 +25,23 @@
     configFile = pkgs.writeTextFile {
       name = "";
       text = /*nimscript*/ ''
-task compile, "Compiles":
-  let target = "x86_64-linux-gnu "
-  let d = "-d:release "
-  let cc = "--cc:clang "
-  let exe = "--clang.exe=\"zigcc\" "
-  let linker = "--clang.linkerexe=\"zigcc\" "
-  let cmd = "nim c " & d & cc & exe & linker
-  exec cmd
+import std/os
+let nimbleDir = getHomeDir() & "/.nimble/bin"
+let zigcc = nimbleDir & "/zigcc"
+
+switch("path", nimbleDir)
+switch("define", "release")
+switch("cc", "clang")
+switch("clang.exe", "zigcc")
+switch("clang.linkerexe", "zigcc")
       '';
     };
 
     check = ''
-      file=''${PWD##*/}
-      file=''${file:-/}
-      file=''${file}.nimble
+      file="config.nims"
       if [ ! -e $file ]
         then
-	  nimble init
-	  cat ${configFile} >> ''${file}
+	  cat ${configFile} > ''${file}
       fi
     '';
 
